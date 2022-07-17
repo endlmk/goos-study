@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.googlecode.windowlicker:windowlicker-swing:r268'
+    implementation 'org.igniterealtime.smack:smack-java8:4.4.5'
+    implementation 'org.igniterealtime.smack:smack-tcp:4.4.5'
+    implementation 'org.igniterealtime.smack:smack-im:4.4.5'
+    implementation 'org.igniterealtime.smack:smack-extensions:4.4.5'
+    implementation 'org.hamcrest:hamcrest:2.2'
+    implementation 'org.mockito:mockito-all:1.10.19'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}

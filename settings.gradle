@@ -1,0 +1,4 @@
+rootProject.name = 'AuctionSniper'
+include 'src:test:end-to-end'
+findProject(':src:test:end-to-end')?.name = 'end-to-end'
+
