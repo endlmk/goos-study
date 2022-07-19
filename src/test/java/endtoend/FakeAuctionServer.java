@@ -61,7 +61,7 @@ public class FakeAuctionServer {
 
     public void announceClosed() throws SmackException.NotConnectedException, InterruptedException {
         if(messageListener.GetCurrentChat() != null) {
-            messageListener.GetCurrentChat().send(StanzaBuilder.buildMessage().build());
+            messageListener.GetCurrentChat().send("");
         }
     }
 

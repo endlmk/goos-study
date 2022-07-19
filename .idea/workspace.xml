@@ -4,25 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="659b8131-1af5-4228-8bcc-13e09ba88168" name="Changes" comment="Initial Test Failed.">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/auctionsniper/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/auctionsniper/ui/MainWindow.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/endtoend/ApplicationRunner.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/endtoend/AuctionSniperDriver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/endtoend/AuctionSniperEndToEndTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/endtoend/FakeAuctionServer.java" afterDir="false" />
+    <list default="true" id="659b8131-1af5-4228-8bcc-13e09ba88168" name="Changes" comment="Add Label.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/auctionsniper/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/auctionsniper/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/endtoend/FakeAuctionServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/endtoend/FakeAuctionServer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +126,7 @@
       <recent name="C:\Users\Kenichi Mishima\IdeaProjects\AuctionSniper\src\test\endtoend" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.AuctionSniperEndToEndTest.sniperJoinsAuctionUntilAuctionCloses (1)">
+  <component name="RunManager" selected="Gradle.AuctionSniperEndToEndTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="auctionsniper.Main" />
       <module name="AuctionSniper.main" />
@@ -245,8 +230,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.AuctionSniperEndToEndTest.sniperJoinsAuctionUntilAuctionCloses (1)" />
         <item itemvalue="Gradle.AuctionSniperEndToEndTest" />
+        <item itemvalue="Gradle.AuctionSniperEndToEndTest.sniperJoinsAuctionUntilAuctionCloses (1)" />
         <item itemvalue="アプリケーション.Main" />
         <item itemvalue="Gradle.AuctionSniper [testClasses]" />
         <item itemvalue="Gradle.AuctionSniper [build]" />
@@ -262,6 +247,14 @@
       <option name="presentableId" value="Default" />
       <updated>1657891115907</updated>
     </task>
+    <task id="LOCAL-00001" summary="Add Label.">
+      <created>1658241286140</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1658241286140</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -277,6 +270,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Test Failed." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Test Failed." />
+    <MESSAGE value="Add Label." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add Label." />
   </component>
 </project>
