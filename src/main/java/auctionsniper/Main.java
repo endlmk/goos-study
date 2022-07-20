@@ -4,13 +4,11 @@ import auctionsniper.ui.MainWindow;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
+import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.StanzaBuilder;
-import org.jivesoftware.smack.packet.StanzaFactory;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.EntityBareJid;
-import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
@@ -30,24 +28,24 @@ public class Main {
     private static final String AUCTION_RESOURCE = "Auction";
     private static final String ITEM_ID_AS_LOGIN = "auction-%s";
     private static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
-    //private static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s";
+    @SuppressWarnings("unused")
+    private Chat notToBeGCd;
+
     public Main () throws Exception {
         startUserInterface();
     }
 
     public static void main (String... args) throws Exception {
         Main main = new Main();
-        XMPPConnection connection = connectTo(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
-        ChatManager manager = ChatManager.getInstanceFor(connection);
-        Chat chat = manager.chatWith(auctionId(args[ARG_ITEM_ID], connection));
-        chat.send("");
+        main.joinAuction(connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]),
+                args[ARG_ITEM_ID]);
     }
 
     private void startUserInterface() throws Exception {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
     }
 
-    private static XMPPConnection connectTo(String hostname, String username, String password) throws IOException, SmackException, XMPPException, InterruptedException {
+    private static XMPPConnection connection(String hostname, String username, String password) throws IOException, SmackException, XMPPException, InterruptedException {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain(hostname)
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
@@ -61,6 +59,14 @@ public class Main {
     private static EntityBareJid auctionId(String itemId, XMPPConnection connection) throws XmppStringprepException {
         String address = String.format(AUCTION_ID_FORMAT, itemId, connection.getXMPPServiceDomain().toString());
         return JidCreate.entityBareFrom(address);
+    }
+
+    private void joinAuction(XMPPConnection connection, String itemId) throws XmppStringprepException, SmackException.NotConnectedException, InterruptedException {
+        ChatManager manager = ChatManager.getInstanceFor(connection);
+        final Chat chat = manager.chatWith(auctionId(itemId, connection));
+        manager.addIncomingListener((from, message, chat1) -> SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST)));
+        this.notToBeGCd = chat;
+        chat.send("");
     }
 }
 

@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="659b8131-1af5-4228-8bcc-13e09ba88168" name="Changes" comment="Add Label.">
+    <list default="true" id="659b8131-1af5-4228-8bcc-13e09ba88168" name="Changes" comment="Impl join chat, fix message.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/auctionsniper/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/auctionsniper/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/endtoend/FakeAuctionServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/endtoend/FakeAuctionServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/auctionsniper/ui/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/auctionsniper/ui/MainWindow.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +126,7 @@
       <recent name="C:\Users\Kenichi Mishima\IdeaProjects\AuctionSniper\src\test\endtoend" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.AuctionSniperEndToEndTest">
+  <component name="RunManager" selected="Gradle.AuctionSniperEndToEndTest.sniperJoinsAuctionUntilAuctionCloses (1)">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="auctionsniper.Main" />
       <module name="AuctionSniper.main" />
@@ -230,8 +230,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.AuctionSniperEndToEndTest" />
         <item itemvalue="Gradle.AuctionSniperEndToEndTest.sniperJoinsAuctionUntilAuctionCloses (1)" />
+        <item itemvalue="Gradle.AuctionSniperEndToEndTest" />
         <item itemvalue="アプリケーション.Main" />
         <item itemvalue="Gradle.AuctionSniper [testClasses]" />
         <item itemvalue="Gradle.AuctionSniper [build]" />
