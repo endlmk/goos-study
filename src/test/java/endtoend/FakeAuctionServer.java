@@ -1,5 +1,7 @@
 package endtoend;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SmackException;
@@ -22,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -68,6 +71,20 @@ public class FakeAuctionServer {
     public void stop() {
         connection.disconnect();
     }
+
+    public void reportPrice(int price, int increment, String bidder) throws SmackException.NotConnectedException, InterruptedException {
+        messageListener.GetCurrentChat().send(
+                String.format("SOLVersion: 1.1; Event: PRICE; CurrentPrice %d; Increment: %d; Bidder : %s;",
+                        price, increment, bidder)
+        );
+    }
+
+    public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+        assertThat(messageListener.GetCurrentChat().getXmppAddressOfChatPartner().toString(), equalTo(sniperId));
+        messageListener.receivesAMessage(
+                equalTo(String.format("SOLVersion: 1.1; Command: BID; Price: %d;", bid))
+        );
+    }
 }
 
 class SingleMessageListener implements IncomingChatMessageListener
@@ -86,5 +103,11 @@ class SingleMessageListener implements IncomingChatMessageListener
 
     public Chat GetCurrentChat() {
         return currentChat;
+    }
+
+    public void receivesAMessage(Matcher<? super String> messageMatcher) throws InterruptedException {
+        final Message message = messages.poll(5, TimeUnit.SECONDS);
+        assertThat("Message", message, is(notNullValue()));
+        assertThat(message.getBody(), messageMatcher);
     }
 }
