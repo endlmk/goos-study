@@ -14,6 +14,9 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import javax.swing.*;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 import static java.lang.String.format;
@@ -31,6 +34,8 @@ public class Main {
     @SuppressWarnings("unused")
     private Chat notToBeGCd;
 
+    public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
+
     public Main () throws Exception {
         startUserInterface();
     }
@@ -45,7 +50,7 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
     }
 
-    private static XMPPConnection connection(String hostname, String username, String password) throws IOException, SmackException, XMPPException, InterruptedException {
+    private static AbstractXMPPConnection connection(String hostname, String username, String password) throws IOException, SmackException, XMPPException, InterruptedException {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain(hostname)
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
@@ -61,12 +66,22 @@ public class Main {
         return JidCreate.entityBareFrom(address);
     }
 
-    private void joinAuction(XMPPConnection connection, String itemId) throws XmppStringprepException, SmackException.NotConnectedException, InterruptedException {
+    private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException, SmackException.NotConnectedException, InterruptedException {
+        disconnectWhenUICloses(connection);
         ChatManager manager = ChatManager.getInstanceFor(connection);
         final Chat chat = manager.chatWith(auctionId(itemId, connection));
         manager.addIncomingListener((from, message, chat1) -> SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST)));
         this.notToBeGCd = chat;
-        chat.send("");
+        chat.send(JOIN_COMMAND_FORMAT);
+    }
+
+    private void disconnectWhenUICloses(final AbstractXMPPConnection connection) {
+        ui.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                connection.disconnect();
+            }
+        });
     }
 }
 

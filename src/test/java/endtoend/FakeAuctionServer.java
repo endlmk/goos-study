@@ -1,7 +1,7 @@
 package endtoend;
 
+import auctionsniper.Main;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SmackException;
@@ -10,15 +10,12 @@ import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.StanzaBuilder;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -58,8 +55,8 @@ public class FakeAuctionServer {
         return itemId;
     }
 
-    public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-        messageListener.receiveAMessage();
+    public void hasReceivedJoinRequestFromSniper(String sniperId) throws InterruptedException {
+        receivesAMessageMatching(sniperId, equalTo(Main.JOIN_COMMAND_FORMAT));
     }
 
     public void announceClosed() throws SmackException.NotConnectedException, InterruptedException {
@@ -80,11 +77,14 @@ public class FakeAuctionServer {
     }
 
     public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
-        assertThat(messageListener.GetCurrentChat().getXmppAddressOfChatPartner().toString(), equalTo(sniperId));
-        messageListener.receivesAMessage(
-                equalTo(String.format("SOLVersion: 1.1; Command: BID; Price: %d;", bid))
-        );
+        receivesAMessageMatching(sniperId, equalTo(String.format("SOLVersion: 1.1; Command: BID; Price: %d;", bid)));
     }
+
+    public void receivesAMessageMatching(String sniperId, Matcher<? super String> messageMatcher) throws InterruptedException {
+        messageListener.receivesAMessage(messageMatcher);
+        assertThat(messageListener.GetCurrentChat().getXmppAddressOfChatPartner().toString(), equalTo(sniperId));
+    }
+
 }
 
 class SingleMessageListener implements IncomingChatMessageListener
