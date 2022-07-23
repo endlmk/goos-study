@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import static java.lang.String.format;
 
-public class Main {
+public class Main implements AuctionEventListener {
     private MainWindow ui;
 
     private static final int ARG_HOSTNAME = 0;
@@ -70,7 +70,7 @@ public class Main {
         disconnectWhenUICloses(connection);
         ChatManager manager = ChatManager.getInstanceFor(connection);
         final Chat chat = manager.chatWith(auctionId(itemId, connection));
-        manager.addIncomingListener((from, message, chat1) -> SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST)));
+        manager.addIncomingListener(new AuctionMessageTranslator(this));
         this.notToBeGCd = chat;
         chat.send(JOIN_COMMAND_FORMAT);
     }
@@ -82,6 +82,11 @@ public class Main {
                 connection.disconnect();
             }
         });
+    }
+
+    @Override
+    public void auctionClosed() {
+        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
     }
 }
 
