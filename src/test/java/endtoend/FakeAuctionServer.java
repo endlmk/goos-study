@@ -61,7 +61,7 @@ public class FakeAuctionServer {
 
     public void announceClosed() throws SmackException.NotConnectedException, InterruptedException {
         if(messageListener.GetCurrentChat() != null) {
-            messageListener.GetCurrentChat().send("");
+            messageListener.GetCurrentChat().send("SOLVersion: 1.1; Event: CLOSE;");
         }
     }
 

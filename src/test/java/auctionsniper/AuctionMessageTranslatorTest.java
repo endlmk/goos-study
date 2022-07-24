@@ -17,11 +17,23 @@ public class AuctionMessageTranslatorTest {
     public void notifiesAuctionClosedWhenCloseMessageReceived() {
         Message message = StanzaBuilder
                 .buildMessage()
-                .setBody("SOLVersion: 1.1; Event CLOSE;")
+                .setBody("SOLVersion: 1.1; Event: CLOSE;")
                 .build();
 
         translator.newIncomingMessage(UNUSED_ADDRESS, message, UNUSED_CHAT);
 
         Mockito.verify(listener).auctionClosed();
+    }
+
+    @Test
+    public void notifiesBidDetailWhenCurrentPriceMessageReceived() {
+        Message message = StanzaBuilder
+                .buildMessage()
+                .setBody("SOLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: Someone else;")
+                .build();
+
+        translator.newIncomingMessage(UNUSED_ADDRESS, message ,UNUSED_CHAT);
+
+        Mockito.verify(listener, Mockito.times(1)).currentPrice(192, 7);
     }
 }
