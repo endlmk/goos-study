@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import static java.lang.String.format;
 
-public class Main implements AuctionEventListener {
+public class Main implements SniperListener {
     private MainWindow ui;
 
     private static final int ARG_HOSTNAME = 0;
@@ -70,7 +70,7 @@ public class Main implements AuctionEventListener {
         disconnectWhenUICloses(connection);
         ChatManager manager = ChatManager.getInstanceFor(connection);
         final Chat chat = manager.chatWith(auctionId(itemId, connection));
-        manager.addIncomingListener(new AuctionMessageTranslator(this));
+        manager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(this)));
         this.notToBeGCd = chat;
         chat.send(JOIN_COMMAND_FORMAT);
     }
@@ -85,13 +85,8 @@ public class Main implements AuctionEventListener {
     }
 
     @Override
-    public void auctionClosed() {
+    public void sniperLost() {
         SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-    }
-
-    @Override
-    public void currentPrice(int price, int increment) {
-
     }
 }
 
