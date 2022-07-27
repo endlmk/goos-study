@@ -14,23 +14,52 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
     }
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
-        HashMap<String, String> event = unpackEventFrom(message);
-
-        String type = event.get("Event");
-        if("CLOSE".equals(type)) {
+        AuctionEvent event = AuctionEvent.from(message.getBody());
+        String eventType = event.type();
+        if("CLOSE".equals(eventType)) {
             listener.auctionClosed();
-        } else if ("PRICE".equals(type)) {
-            listener.currentPrice(Integer.parseInt(event.get("CurrentPrice")),
-                    Integer.parseInt(event.get("Increment")));
+        } else if ("PRICE".equals(eventType)) {
+            listener.currentPrice(event.currentPrice(), event.increment());
         }
     }
 
-    private HashMap<String, String> unpackEventFrom(Message message) {
-        HashMap<String, String> event = new HashMap<>();
-        for (String element : message.getBody().split(";")) {
-            String[] pair = element.split(":");
-            event.put(pair[0].trim(), pair[1].trim());
+    private static class AuctionEvent {
+        HashMap<String, String> fields = new HashMap<>();
+
+        public String type() {
+            return get("Event");
         }
-        return event;
+
+        public int currentPrice() {
+            return getInt("CurrentPrice");
+        }
+
+        public int increment() {
+            return getInt("Increment");
+        }
+
+        private String get(String fieldName) {
+            return fields.get(fieldName);
+        }
+
+        private int getInt(String fieldName) {
+            return Integer.parseInt(get(fieldName));
+        }
+
+        private void addField(String element) {
+            String[] pair = element.split(":");
+            fields.put(pair[0].trim(), pair[1].trim());
+        }
+        static AuctionEvent from(String messageBody) {
+            AuctionEvent event = new AuctionEvent();
+            for (String element : fieldsIn(messageBody)) {
+                event.addField(element);
+            }
+            return event;
+        }
+
+        private static String[] fieldsIn(String messageBody) {
+            return messageBody.split(";");
+        }
     }
 }
