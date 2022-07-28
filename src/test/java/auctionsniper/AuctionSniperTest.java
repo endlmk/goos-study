@@ -1,8 +1,9 @@
 package auctionsniper;
 
-import endtoend.AuctionSniperDriver;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static auctionsniper.AuctionEventListener.*;
 
 public class AuctionSniperTest {
     private final Auction auction = Mockito.mock(Auction.class);
@@ -20,7 +21,7 @@ public class AuctionSniperTest {
         final int price = 1001;
         final int increment = 25;
 
-        sniper.currentPrice(price, increment);
+        sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
         Mockito.verify(auction).bid(price + increment);
         Mockito.verify(sniperListener, Mockito.atLeastOnce()).sniperBidding();
     }

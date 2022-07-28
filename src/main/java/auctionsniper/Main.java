@@ -4,23 +4,16 @@ import auctionsniper.ui.MainWindow;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
-import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
-import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
-import org.minidns.record.A;
 
 import javax.swing.*;
-
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
-
-import static java.lang.String.format;
 
 public class Main {
     private MainWindow ui;
@@ -74,7 +67,7 @@ public class Main {
         this.notToBeGCd = chat;
 
         Auction auction = new XMPPAuction(chat);
-        manager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(auction, new SniperStateDisplayer())));
+        manager.addIncomingListener(new AuctionMessageTranslator(connection.getUser().asEntityBareJidString(), new AuctionSniper(auction, new SniperStateDisplayer())));
         auction.join();
     }
 
@@ -95,7 +88,7 @@ public class Main {
         public void sniperLost() { SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST)); }
     }
 
-    public static class XMPPAuction extends Auction {
+    public static class XMPPAuction implements Auction {
         private final Chat chat;
 
         public XMPPAuction(Chat chat) {
