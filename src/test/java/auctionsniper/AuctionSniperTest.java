@@ -25,4 +25,10 @@ public class AuctionSniperTest {
         Mockito.verify(auction).bid(price + increment);
         Mockito.verify(sniperListener, Mockito.atLeastOnce()).sniperBidding();
     }
+
+    @Test
+    public void reportsIsWinningWhenCurrentPriceComesFromSniper() {
+        sniper.currentPrice(123, 45, PriceSource.FromSniper);
+        Mockito.verify(sniperListener).sniperWinning();
+    }
 }

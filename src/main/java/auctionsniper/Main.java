@@ -86,6 +86,9 @@ public class Main {
 
         @Override
         public void sniperLost() { SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST)); }
+
+        @Override
+        public void sniperWinning() { SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_WINNING)); }
     }
 
     public static class XMPPAuction implements Auction {
