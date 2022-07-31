@@ -43,6 +43,16 @@ public class AuctionSniperTest {
         Mockito.verify(sniperListener).sniperWinning();
     }
 
+    @Test
+    public void reportsWonIfAuctionClosesWhenWinning() {
+        sniper.currentPrice(123, 45, PriceSource.FromSniper);
+        sniper.auctionClosed();
+
+        Mockito.verify(sniperListener).sniperWinning();
+        assertThat(state, IsEqual.equalTo(SniperStateForSpy.Winning));
+        Mockito.verify(sniperListener).sniperWon();
+    }
+
     private class SniperListenerStub implements SniperListener {
         @Override
         public void sniperLost() {
@@ -55,7 +65,10 @@ public class AuctionSniperTest {
         }
 
         @Override
-        public void sniperWinning() {
+        public void sniperWinning() { state = SniperStateForSpy.Winning; }
+
+        @Override
+        public void sniperWon() {
 
         }
     }

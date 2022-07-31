@@ -25,8 +25,6 @@ public class Main {
     private static final String AUCTION_RESOURCE = "Auction";
     private static final String ITEM_ID_AS_LOGIN = "auction-%s";
     private static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
-    @SuppressWarnings("unused")
-    private Chat notToBeGCd;
     public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
     private static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 
@@ -64,7 +62,6 @@ public class Main {
         disconnectWhenUICloses(connection);
         ChatManager manager = ChatManager.getInstanceFor(connection);
         final Chat chat = manager.chatWith(auctionId(itemId, connection));
-        this.notToBeGCd = chat;
 
         Auction auction = new XMPPAuction(chat);
         manager.addIncomingListener(new AuctionMessageTranslator(connection.getUser().asEntityBareJidString(), new AuctionSniper(auction, new SniperStateDisplayer())));
@@ -82,13 +79,28 @@ public class Main {
 
     public class SniperStateDisplayer implements SniperListener {
         @Override
-        public void sniperBidding() { SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING)); }
+        public void sniperBidding() {
+            showStatus(MainWindow.STATUS_BIDDING);
+        }
 
         @Override
-        public void sniperLost() { SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST)); }
+        public void sniperLost() {
+            showStatus(MainWindow.STATUS_LOST);
+        }
 
         @Override
-        public void sniperWinning() { SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_WINNING)); }
+        public void sniperWinning() {
+            showStatus(MainWindow.STATUS_WINNING);
+        }
+
+        @Override
+        public void sniperWon() {
+            showStatus(MainWindow.STATUS_WON);
+        }
+
+        private void showStatus(String statusWinning) {
+            SwingUtilities.invokeLater(() -> ui.showStatus(statusWinning));
+        }
     }
 
     public static class XMPPAuction implements Auction {
