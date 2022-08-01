@@ -99,7 +99,7 @@ public class Main {
         }
 
         private void showStatus(String statusWinning) {
-            SwingUtilities.invokeLater(() -> ui.showStatus(statusWinning));
+            SwingUtilities.invokeLater(() -> ui.showStatusText(statusWinning));
         }
     }
 
