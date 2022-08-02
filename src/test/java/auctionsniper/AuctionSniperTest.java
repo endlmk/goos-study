@@ -8,9 +8,10 @@ import static auctionsniper.AuctionEventListener.PriceSource;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AuctionSniperTest {
+    private static final String ITEM_ID = "item-54321";
     private final Auction auction = Mockito.mock(Auction.class);
     private final SniperListener sniperListener = Mockito.spy(new SniperListenerStub());
-    private final AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
+    private final AuctionSniper sniper = new AuctionSniper(auction, sniperListener, ITEM_ID);
     private enum SniperStateForSpy { Lost, Bidding, Winning }
     private SniperStateForSpy state = SniperStateForSpy.Lost;
     @Test
@@ -31,10 +32,12 @@ public class AuctionSniperTest {
     public void bidsHigherAndReportsBiddingWhenNewPriceArrived() {
         final int price = 1001;
         final int increment = 25;
+        final int bid = price + increment;
 
         sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
-        Mockito.verify(auction).bid(price + increment);
-        Mockito.verify(sniperListener, Mockito.atLeastOnce()).sniperBidding();
+        Mockito.verify(auction).bid(bid);
+        Mockito.verify(sniperListener, Mockito.atLeastOnce()).sniperBidding(
+                new SniperState(ITEM_ID, price, bid));
     }
 
     @Test
@@ -60,7 +63,7 @@ public class AuctionSniperTest {
         }
 
         @Override
-        public void sniperBidding() {
+        public void sniperBidding(SniperState sniperState) {
             state = SniperStateForSpy.Bidding;
         }
 
