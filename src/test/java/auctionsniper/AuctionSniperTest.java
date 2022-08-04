@@ -1,30 +1,37 @@
 package auctionsniper;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.ArgumentCaptor;
+
+import java.util.List;
 
 import static auctionsniper.AuctionEventListener.PriceSource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.mockito.Mockito.*;
 
 public class AuctionSniperTest {
     private static final String ITEM_ID = "item-54321";
-    private final Auction auction = Mockito.mock(Auction.class);
-    private final SniperListener sniperListener = Mockito.spy(new SniperListenerStub());
-    private final AuctionSniper sniper = new AuctionSniper(auction, sniperListener, ITEM_ID);
+    private final Auction auction = mock(Auction.class);
+    private final SniperListener sniperListener = spy(new SniperListenerStub());
+    private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction, sniperListener);
     private SniperState state = SniperState.JOINING;
     @Test
     public void reportsLostWhenAuctionClosedImmediately() {
         sniper.auctionClosed();
-        Mockito.verify(sniperListener).sniperLost();
+        verify(sniperListener).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, 0, 0, SniperState.LOST)
+        );
     }
 
     @Test
     public void reportsLostIfAuctionClosesWhenBidding() {
         sniper.currentPrice(123,45, PriceSource.FromOtherBidder);
         sniper.auctionClosed();
-        Mockito.verify(sniperListener).sniperLost();
-        assertThat(state, equalTo(SniperState.BIDDING));
+        verify(sniperListener).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, 123, 168, SniperState.LOST)
+        );
+        assertThat(state, equalTo(SniperState.LOST));
     }
 
     @Test
@@ -34,8 +41,8 @@ public class AuctionSniperTest {
         final int bid = price + increment;
 
         sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
-        Mockito.verify(auction).bid(bid);
-        Mockito.verify(sniperListener, Mockito.atLeastOnce()).sniperStateChanged(
+        verify(auction).bid(bid);
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(
                 new SniperSnapshot(ITEM_ID, price, bid, SniperState.BIDDING));
     }
 
@@ -43,34 +50,28 @@ public class AuctionSniperTest {
     public void reportsIsWinningWhenCurrentPriceComesFromSniper() {
         sniper.currentPrice(123, 12, PriceSource.FromOtherBidder);
         sniper.currentPrice(135, 45, PriceSource.FromSniper);
-        Mockito.verify(sniperListener).sniperStateChanged(
+        verify(sniperListener).sniperStateChanged(
                 new SniperSnapshot(ITEM_ID, 135, 135, SniperState.WINNING)
         );
     }
 
     @Test
     public void reportsWonIfAuctionClosesWhenWinning() {
+        ArgumentCaptor<SniperSnapshot> snapshotCaptor = ArgumentCaptor.forClass(SniperSnapshot.class);
+
         sniper.currentPrice(123, 45, PriceSource.FromSniper);
         sniper.auctionClosed();
-
-        assertThat(state, equalTo(SniperState.WINNING));
-        Mockito.verify(sniperListener).sniperWon();
+        verify(sniperListener, times(2)).sniperStateChanged(snapshotCaptor.capture());
+        List<SniperSnapshot> result = snapshotCaptor.getAllValues();
+        assertThat(result.get(0).state(), equalTo(SniperState.WINNING));
+        assertThat(result.get(1).state(), equalTo(SniperState.WON));
+        assertThat(state, equalTo(SniperState.WON));
     }
 
     private class SniperListenerStub implements SniperListener {
         @Override
-        public void sniperLost() {
-
-        }
-
-        @Override
         public void sniperStateChanged(SniperSnapshot sniperSnapshot) {
             state = sniperSnapshot.state();
-        }
-
-        @Override
-        public void sniperWon() {
-
         }
     }
 }

@@ -13,4 +13,8 @@ public record SniperSnapshot(String itemId, int lastPrice, int lastBid, SniperSt
     public SniperSnapshot bidding(int newLastPrice, int newLastBid) {
         return new SniperSnapshot(itemId(), newLastPrice, newLastBid, SniperState.BIDDING);
     }
+
+    public SniperSnapshot closed() {
+        return new SniperSnapshot(itemId(), lastPrice(), lastBid(), state.whenAuctionClosed());
+    }
 }
