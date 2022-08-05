@@ -5,11 +5,12 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
+    public static final String APPLICATION_TITLE = "Auction Sniper";
     private final SnipersTableModel snipers;
     private static final String SNIPER_TABLE_NAME = "Snipers Table";
 
     public MainWindow(SnipersTableModel snipers) {
-        super("Auction Sniper");
+        super(APPLICATION_TITLE);
         this.snipers = snipers;
         setName(MAIN_WINDOW_NAME);
         fillContentPane(makeSnipersTable());

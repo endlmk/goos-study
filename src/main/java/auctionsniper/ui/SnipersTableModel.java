@@ -35,4 +35,9 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
         sniperSnapshot = newSniperSnapshot;
         fireTableRowsUpdated(0, 0);
     }
+
+    @Override
+    public String getColumnName(int column) {
+        return Column.at(column).name;
+    }
 }

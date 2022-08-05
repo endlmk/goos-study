@@ -5,26 +5,32 @@ import auctionsniper.SniperSnapshot;
 import static auctionsniper.ui.SnipersTableModel.textFor;
 
 public enum Column {
-    ITEM_IDENTIFIER {
+    ITEM_IDENTIFIER("Item") {
         public Object valueIn(SniperSnapshot snapshot) {
             return snapshot.itemId();
         }
     },
-    LAST_PRICE {
+    LAST_PRICE("Last Price") {
         public Object valueIn(SniperSnapshot snapshot) {
             return snapshot.lastPrice();
         }
     },
-    LAST_BID {
+    LAST_BID("Last Bid") {
         public Object valueIn(SniperSnapshot snapshot) {
             return snapshot.lastBid();
         }
     },
-    SNIPER_STATUS{
+    SNIPER_STATUS("State"){
         public Object valueIn(SniperSnapshot snapshot) {
             return textFor(snapshot.state());
         }
     };
+
+    public final String name;
+
+    Column(String name) {
+        this.name = name;
+    }
 
     abstract public Object valueIn(SniperSnapshot snapshot);
 
