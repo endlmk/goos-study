@@ -12,12 +12,19 @@ import static auctionsniper.AuctionEventListener.*;
 public class AuctionMessageTranslator implements IncomingChatMessageListener {
     private final String sniperId;
     private final AuctionEventListener listener;
-    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
+
+    private final EntityBareJid auctionItemId;
+    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener, EntityBareJid auctionItemId) {
         this.sniperId = sniperId;
         this.listener = listener;
+        this.auctionItemId = auctionItemId;
     }
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
+        if(from.compareTo(auctionItemId) != 0)
+        {
+            return;
+        }
         AuctionEvent event = AuctionEvent.from(message.getBody());
         String eventType = event.type();
         if("CLOSE".equals(eventType)) {

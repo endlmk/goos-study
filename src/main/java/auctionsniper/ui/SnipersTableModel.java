@@ -3,17 +3,18 @@ package auctionsniper.ui;
 import auctionsniper.SniperListener;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;
+import com.objogate.exception.Defect;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
 
 public class SnipersTableModel extends AbstractTableModel implements SniperListener {
-    private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.JOINING);
-    private SniperSnapshot sniperSnapshot = STARTING_UP;
+    private final ArrayList<SniperSnapshot> snapshots = new ArrayList<>();
     private static final String[] STATUS_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won"};
 
     @Override
     public int getRowCount() {
-        return 1;
+        return snapshots.size();
     }
 
     @Override
@@ -23,7 +24,7 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return Column.at(columnIndex).valueIn(sniperSnapshot);
+        return Column.at(columnIndex).valueIn(snapshots.get(rowIndex));
     }
 
     public static String textFor(SniperState state) {
@@ -32,12 +33,28 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 
     @Override
     public void sniperStateChanged(SniperSnapshot newSniperSnapshot) {
-        sniperSnapshot = newSniperSnapshot;
-        fireTableRowsUpdated(0, 0);
+        int row = rowMatching(newSniperSnapshot);
+        snapshots.set(row, newSniperSnapshot);
+        fireTableRowsUpdated(row, row);
+    }
+
+    private int rowMatching(SniperSnapshot snapshot) {
+        for (int i = 0; i < snapshots.size(); i++) {
+            if(snapshot.isForSameItemAs(snapshots.get(i))) {
+                return i;
+            }
+        }
+        throw new Defect("Cannot find match for " + snapshot);
     }
 
     @Override
     public String getColumnName(int column) {
         return Column.at(column).name;
+    }
+
+    public void addSniper(SniperSnapshot joining) {
+        snapshots.add(joining);
+        int row = snapshots.size() - 1;
+        fireTableRowsInserted(row, row);
     }
 }

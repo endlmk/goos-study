@@ -20,7 +20,7 @@ public enum Column {
             return snapshot.lastBid();
         }
     },
-    SNIPER_STATUS("State"){
+    SNIPER_STATE("State"){
         public Object valueIn(SniperSnapshot snapshot) {
             return textFor(snapshot.state());
         }
