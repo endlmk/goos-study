@@ -1,8 +1,13 @@
 package auctionsniper.ui;
 
+import auctionsniper.UserRequestListener;
+import auctionsniper.util.Announcer;
+
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainWindow extends JFrame {
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
@@ -10,6 +15,7 @@ public class MainWindow extends JFrame {
     public static final String JOIN_BUTTON_NAME = "join button";
     public static final String NEW_ITEM_ID_NAME = "item id";
     private static final String SNIPER_TABLE_NAME = "Snipers Table";
+    private final Announcer<UserRequestListener> userRequests = Announcer.to(UserRequestListener.class);
 
     public MainWindow(SnipersTableModel snipers) {
         super(APPLICATION_TITLE);
@@ -29,6 +35,13 @@ public class MainWindow extends JFrame {
 
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_BUTTON_NAME);
+        joinAuctionButton.addActionListener(e -> {
+            try {
+                userRequests.announce().joinAuction(itemIDField.getText());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
         controls.add(joinAuctionButton);
 
         return controls;
@@ -45,5 +58,9 @@ public class MainWindow extends JFrame {
         final JTable snipersTable = new JTable(snipers);
         snipersTable.setName(SNIPER_TABLE_NAME);
         return snipersTable;
+    }
+
+    public void addUserRequestListener(UserRequestListener userRequestListener) {
+        userRequests.addListener(userRequestListener);
     }
 }
