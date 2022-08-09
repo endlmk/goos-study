@@ -6,6 +6,8 @@ import java.awt.*;
 public class MainWindow extends JFrame {
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
     public static final String APPLICATION_TITLE = "Auction Sniper";
+    public static final String JOIN_BUTTON_NAME = "join button";
+    public static final String NEW_ITEM_ID_NAME = "item id";
     private final SnipersTableModel snipers;
     private static final String SNIPER_TABLE_NAME = "Snipers Table";
 
