@@ -1,6 +1,7 @@
 package endtoend;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.jxmpp.stringprep.XmppStringprepException;
 
@@ -12,6 +13,10 @@ public class AuctionSniperEndToEndTest {
     public AuctionSniperEndToEndTest() throws XmppStringprepException {
     }
 
+    @BeforeAll
+    public static void setupKeyboardLayout() {
+        System.setProperty("com.objogate.wl.keyboard", "US");
+    }
     @Test
     public void sniperJoinsAuctionUntilAuctionCloses() throws Exception {
         auction.startSellingItem();
