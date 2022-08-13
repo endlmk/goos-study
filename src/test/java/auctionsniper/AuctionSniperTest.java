@@ -1,5 +1,6 @@
 package auctionsniper;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -14,8 +15,13 @@ public class AuctionSniperTest {
     private static final String ITEM_ID = "item-54321";
     private final Auction auction = mock(Auction.class);
     private final SniperListener sniperListener = spy(new SniperListenerStub());
-    private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction, sniperListener);
+    private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction);
     private SniperState state = SniperState.JOINING;
+
+    @BeforeEach
+    public void addSniperListener() {
+        sniper.addSniperListener(sniperListener);
+    }
     @Test
     public void reportsLostWhenAuctionClosedImmediately() {
         sniper.auctionClosed();
