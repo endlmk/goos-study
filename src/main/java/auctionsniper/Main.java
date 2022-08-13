@@ -1,14 +1,12 @@
 package auctionsniper;
 
 import auctionsniper.ui.MainWindow;
-import auctionsniper.ui.SnipersTableModel;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class Main {
-    private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
 
     private static final int ARG_HOSTNAME = 0;
@@ -19,9 +17,10 @@ public class Main {
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
     public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
     public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
+    private final SniperPortfolio portfolio = new SniperPortfolio();
 
     public Main () throws Exception {
-        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
+        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(portfolio));
     }
 
     public static void main (String... args) throws Exception {
@@ -32,7 +31,7 @@ public class Main {
     }
 
     private void addUserRequestListenerFor(final AuctionHouse auctionHouse) {
-        ui.addUserRequestListener(new SniperLauncher(auctionHouse, snipers));
+        ui.addUserRequestListener(new SniperLauncher(auctionHouse, portfolio));
     }
 
     private void disconnectWhenUICloses(final XMPPAuctionHouse auctionHouse) {
