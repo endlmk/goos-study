@@ -6,6 +6,7 @@ import auctionsniper.util.Announcer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.NumberFormat;
 
 public class MainWindow extends JFrame {
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
@@ -26,11 +27,14 @@ public class MainWindow extends JFrame {
     }
 
     private JPanel makeControls() {
+        final JTextField itemIDField = itemIDField();
+        final JFormattedTextField stopPriceField = stopPriceField();
+
         JPanel controls = new JPanel(new FlowLayout());
-        final JTextField itemIDField = new JTextField();
-        itemIDField.setColumns(25);
-        itemIDField.setName(NEW_ITEM_ID_NAME);
+        controls.add(new JLabel("Item:"));
         controls.add(itemIDField);
+        controls.add(new JLabel("Stop price:"));
+        controls.add(stopPriceField);
 
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_BUTTON_NAME);
@@ -46,6 +50,19 @@ public class MainWindow extends JFrame {
         return controls;
     }
 
+    private JTextField itemIDField() {
+        JTextField itemIDField = new JTextField();
+        itemIDField.setColumns(10);
+        itemIDField.setName(NEW_ITEM_ID_NAME);
+        return itemIDField;
+    }
+
+    private JFormattedTextField stopPriceField() {
+        JFormattedTextField stopPriceField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+        stopPriceField.setColumns(7);
+        stopPriceField.setName(NEW_ITEM_STOP_PRICE_NAME);
+        return stopPriceField;
+    }
     private void fillContentPane(JTable snipersTable, JPanel controls) {
         final Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
