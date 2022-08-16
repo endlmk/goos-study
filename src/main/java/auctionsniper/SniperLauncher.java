@@ -13,9 +13,9 @@ public class SniperLauncher implements UserRequestListener {
     }
 
     @Override
-    public void joinAuction(String itemId) throws XmppStringprepException {
-        Auction auction = auctionHouse.auctionFor(itemId);
-        AuctionSniper sniper = new AuctionSniper(itemId, auction);
+    public void joinAuction(Item item) throws XmppStringprepException {
+        Auction auction = auctionHouse.auctionFor(item.identifier());
+        AuctionSniper sniper = new AuctionSniper(item, auction);
         auction.addAuctionEventListener(sniper);
         collector.addSniper(sniper);
         auction.join();

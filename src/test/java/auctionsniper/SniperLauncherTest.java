@@ -14,10 +14,10 @@ public class SniperLauncherTest {
 
     @Test
     public void addsNewSniperToCollectionAndThenJoinsAuction() throws XmppStringprepException {
-        final String itemId = "item 123";
-        when(auctionHouse.auctionFor(itemId)).thenReturn(auction);
+        final Item item = new Item("item 123", 456);
+        when(auctionHouse.auctionFor(item.identifier())).thenReturn(auction);
 
-        sniperLauncher.joinAuction(itemId);
+        sniperLauncher.joinAuction(item);
 
         verify(auction).addAuctionEventListener(any(AuctionSniper.class));
         verify(sniperCollector).addSniper(any(AuctionSniper.class));

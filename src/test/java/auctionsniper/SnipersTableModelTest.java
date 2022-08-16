@@ -28,7 +28,7 @@ public class SnipersTableModelTest {
     private TableModelListener listener;
     private final SnipersTableModel model = new SnipersTableModel();
 
-    private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, null);
+    private final AuctionSniper sniper = new AuctionSniper(new Item(ITEM_ID, 234), null);
 
     @BeforeEach
     public void attachModelListener() {
@@ -83,7 +83,7 @@ public class SnipersTableModelTest {
 
     @Test
     public void holdsSnipersInAdditionOrder() {
-        AuctionSniper sniper2 = new AuctionSniper("item 1", null);
+        AuctionSniper sniper2 = new AuctionSniper(new Item("item 1", 345), null);
 
         model.sniperAdded(sniper);
         model.sniperAdded(sniper2);
@@ -95,7 +95,7 @@ public class SnipersTableModelTest {
     @Test
     public void updatesCorrectRowForSniper() {
         SniperSnapshot joining = sniper.getSnapshot();
-        AuctionSniper sniper2 = new AuctionSniper("item 1", null);
+        AuctionSniper sniper2 = new AuctionSniper(new Item("item 1", 345), null);
         SniperSnapshot bidding2 = sniper2.getSnapshot().bidding(22, 22);
 
         model.sniperAdded(sniper);
