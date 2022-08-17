@@ -25,4 +25,8 @@ public record SniperSnapshot(String itemId, int lastPrice, int lastBid, SniperSt
     public SniperSnapshot losing(int newLastPrice) {
         return new SniperSnapshot(itemId(), newLastPrice, lastBid(), SniperState.LOSING);
     }
+
+    public SniperSnapshot failed() {
+        return new SniperSnapshot(itemId, 0, 0, SniperState.FAILED);
+    }
 }

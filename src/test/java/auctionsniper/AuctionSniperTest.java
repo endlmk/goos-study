@@ -135,6 +135,46 @@ public class AuctionSniperTest {
         );
     }
 
+    @Test
+    public void reportsFailedIfAuctionFailsWhenBidding() {
+        sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
+        sniper.auctionFailed();
+
+        verify(sniperListener).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, 0, 0, SniperState.FAILED)
+        );
+    }
+
+    @Test
+    public void reportsFailedIfAuctionFailsImmediately() {
+        sniper.auctionFailed();
+
+        verify(sniperListener).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, 0, 0, SniperState.FAILED)
+        );
+    }
+
+    @Test
+    public void reportsFailedIfAuctionFailsWhenWinning() {
+        sniper.currentPrice(1230, 45, PriceSource.FromOtherBidder);
+        sniper.auctionFailed();
+
+        verify(sniperListener).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, 0, 0, SniperState.FAILED)
+        );
+    }
+
+    @Test
+    public void reportsFailedIfAuctionFailsWhenLosing() {
+        sniper.currentPrice(123, 12, PriceSource.FromOtherBidder);
+        sniper.currentPrice(135, 45, PriceSource.FromSniper);
+        sniper.auctionFailed();
+
+        verify(sniperListener).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, 0, 0, SniperState.FAILED)
+        );
+    }
+
     private class SniperListenerStub implements SniperListener {
         @Override
         public void sniperStateChanged(SniperSnapshot sniperSnapshot) {
