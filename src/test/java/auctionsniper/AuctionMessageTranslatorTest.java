@@ -64,4 +64,16 @@ public class AuctionMessageTranslatorTest {
 
         verify(listener, times(1)).auctionFailed();
     }
+
+    @Test
+    public void notifiesAuctionFailedWhenEventTypeMissing() {
+        Message message = StanzaBuilder
+                .buildMessage()
+                .setBody("SOLVersion: 1.1; CurrentPrice: 234; Increment: 5; Bidder: " + SNIPER_ID + ";")
+                .build();
+
+        translator.newIncomingMessage(FAKE_AUCTION_ADDRESS, message, UNUSED_CHAT);
+
+        verify(listener, times(1)).auctionFailed();
+    }
 }
