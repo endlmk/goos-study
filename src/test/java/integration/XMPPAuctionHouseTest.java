@@ -2,7 +2,7 @@ package integration;
 
 import auctionsniper.Auction;
 import auctionsniper.AuctionEventListener;
-import auctionsniper.XMPPAuctionHouse;
+import auctionsniper.XMPP.XMPPAuctionHouse;
 import endtoend.ApplicationRunner;
 import endtoend.FakeAuctionServer;
 import org.jivesoftware.smack.SmackException;
@@ -68,6 +68,11 @@ public class XMPPAuctionHouseTest {
 
             @Override
             public void currentPrice(int price, int increment, PriceSource fromOtherBidder) {
+
+            }
+
+            @Override
+            public void auctionFailed() {
 
             }
         };

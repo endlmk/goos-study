@@ -1,5 +1,6 @@
 package auctionsniper;
 
+import auctionsniper.XMPP.XMPPAuctionHouse;
 import auctionsniper.ui.MainWindow;
 
 import javax.swing.*;

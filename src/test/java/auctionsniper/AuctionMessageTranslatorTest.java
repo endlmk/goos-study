@@ -1,14 +1,14 @@
 package auctionsniper;
 
+import auctionsniper.XMPP.AuctionMessageTranslator;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.StanzaBuilder;
 import org.junit.jupiter.api.Test;
 import org.jxmpp.jid.EntityBareJid;
-import org.mockito.Mockito;
 
 import static auctionsniper.AuctionEventListener.PriceSource;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 public class AuctionMessageTranslatorTest {
     public static final Chat UNUSED_CHAT = null;
@@ -26,7 +26,7 @@ public class AuctionMessageTranslatorTest {
 
         translator.newIncomingMessage(FAKE_AUCTION_ADDRESS, message, UNUSED_CHAT);
 
-        Mockito.verify(listener).auctionClosed();
+        verify(listener).auctionClosed();
     }
 
     @Test
@@ -38,7 +38,7 @@ public class AuctionMessageTranslatorTest {
 
         translator.newIncomingMessage(FAKE_AUCTION_ADDRESS, message ,UNUSED_CHAT);
 
-        Mockito.verify(listener, Mockito.times(1)).currentPrice(192, 7, PriceSource.FromOtherBidder);
+        verify(listener, times(1)).currentPrice(192, 7, PriceSource.FromOtherBidder);
     }
 
     @Test
@@ -50,6 +50,18 @@ public class AuctionMessageTranslatorTest {
 
         translator.newIncomingMessage(FAKE_AUCTION_ADDRESS, message ,UNUSED_CHAT);
 
-        Mockito.verify(listener, Mockito.times(1)).currentPrice(192, 7, PriceSource.FromSniper);
+        verify(listener, times(1)).currentPrice(192, 7, PriceSource.FromSniper);
+    }
+
+    @Test
+    public void notifiesAuctionFailedWhenBadMessageReceived() {
+        Message message = StanzaBuilder
+                .buildMessage()
+                .setBody("a bad message")
+                .build();
+
+        translator.newIncomingMessage(FAKE_AUCTION_ADDRESS, message, UNUSED_CHAT);
+
+        verify(listener, times(1)).auctionFailed();
     }
 }

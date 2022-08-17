@@ -1,5 +1,8 @@
-package auctionsniper;
+package auctionsniper.XMPP;
 
+import auctionsniper.Auction;
+import auctionsniper.AuctionHouse;
+import auctionsniper.Main;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
