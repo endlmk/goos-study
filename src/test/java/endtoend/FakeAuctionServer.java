@@ -27,7 +27,6 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class FakeAuctionServer {
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
-    public static final String AUCTION_RESOURCE = "Auction";
     public static final String XMPP_HOSTNAME = "localhost";
     public static final String AUCTION_PASSWORD = "auction";
 
@@ -85,6 +84,9 @@ public class FakeAuctionServer {
         assertThat(messageListener.GetCurrentChat().getXmppAddressOfChatPartner().toString(), equalTo(sniperId));
     }
 
+    public void sendInvalidMessageContaining(String brokenMessage) throws SmackException.NotConnectedException, InterruptedException {
+        messageListener.GetCurrentChat().send(brokenMessage);
+    }
 }
 
 class SingleMessageListener implements IncomingChatMessageListener
@@ -95,10 +97,6 @@ class SingleMessageListener implements IncomingChatMessageListener
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
         messages.add(message);
         currentChat = chat;
-    }
-
-    public void receiveAMessage() throws InterruptedException {
-        assertThat(messages.poll(5, TimeUnit.SECONDS), is(notNullValue()));
     }
 
     public Chat GetCurrentChat() {
