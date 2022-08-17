@@ -13,16 +13,40 @@ import org.jxmpp.jid.EntityBareJid;
 public class XMPPAuction implements Auction {
     private final Announcer<AuctionEventListener> auctionEventListeners = Announcer.to(AuctionEventListener.class);
     private final Chat chat;
+    private final ChatManager manager;
 
     public XMPPAuction(AbstractXMPPConnection connection, EntityBareJid auctionId) {
-        ChatManager manager = ChatManager.getInstanceFor(connection);
+        AuctionMessageTranslator translator = translateFor(connection, auctionId);
+        manager = ChatManager.getInstanceFor(connection);
         chat = manager.chatWith(auctionId);
-        manager.addIncomingListener(
-                new AuctionMessageTranslator(
-                        connection.getUser().asEntityBareJidString(),
-                        auctionEventListeners.announce(),
-                        auctionId)
-        );
+        manager.addIncomingListener(translator);
+        addAuctionEventListener(chatDisconnectFor(translator));
+    }
+
+    private AuctionMessageTranslator translateFor(AbstractXMPPConnection connection, EntityBareJid auctionId) {
+        return new AuctionMessageTranslator(
+                connection.getUser().asEntityBareJidString(),
+                auctionEventListeners.announce(),
+                auctionId);
+    }
+
+    private AuctionEventListener chatDisconnectFor(AuctionMessageTranslator translator) {
+        return new AuctionEventListener() {
+            @Override
+            public void auctionClosed() {
+
+            }
+
+            @Override
+            public void currentPrice(int price, int increment, PriceSource fromOtherBidder) {
+
+            }
+
+            @Override
+            public void auctionFailed() {
+                manager.removeIncomingListener(translator);
+            }
+        };
     }
 
     @Override
