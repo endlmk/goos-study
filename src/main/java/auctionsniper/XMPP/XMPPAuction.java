@@ -27,7 +27,10 @@ public class XMPPAuction implements Auction {
         return new AuctionMessageTranslator(
                 connection.getUser().asEntityBareJidString(),
                 auctionEventListeners.announce(),
-                auctionId);
+                auctionId,
+                (auctionId1, failedMessage, exception) -> {
+
+                });
     }
 
     private AuctionEventListener chatDisconnectFor(AuctionMessageTranslator translator) {

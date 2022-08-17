@@ -13,12 +13,14 @@ import static auctionsniper.AuctionEventListener.*;
 public class AuctionMessageTranslator implements IncomingChatMessageListener {
     private final String sniperId;
     private final AuctionEventListener listener;
-
     private final EntityBareJid auctionItemId;
-    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener, EntityBareJid auctionItemId) {
+    private final XMPPFailureReporter failureReporter;
+
+    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener, EntityBareJid auctionItemId, XMPPFailureReporter failureReporter) {
         this.sniperId = sniperId;
         this.listener = listener;
         this.auctionItemId = auctionItemId;
+        this.failureReporter = failureReporter;
     }
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
@@ -26,9 +28,14 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
         {
             return;
         }
+
+
+        String body = message.getBody();
+
         try {
-            translate(message.getBody());
+            translate(body);
         } catch (Exception parseException) {
+            failureReporter.cannotTranslateMessage(sniperId, body, parseException);
             listener.auctionFailed();
         }
     }
