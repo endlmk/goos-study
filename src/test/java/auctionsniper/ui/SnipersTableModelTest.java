@@ -1,7 +1,9 @@
-package auctionsniper;
+package auctionsniper.ui;
 
-import auctionsniper.ui.Column;
-import auctionsniper.ui.SnipersTableModel;
+import auctionsniper.AuctionSniper;
+import auctionsniper.Item;
+import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperState;
 import com.objogate.exception.Defect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

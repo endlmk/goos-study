@@ -1,7 +1,6 @@
-package auctionsniper;
+package auctionsniper.XMPP;
 
-import auctionsniper.XMPP.AuctionMessageTranslator;
-import auctionsniper.XMPP.XMPPFailureReporter;
+import auctionsniper.AuctionEventListener;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.StanzaBuilder;
