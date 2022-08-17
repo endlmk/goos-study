@@ -2,6 +2,7 @@ package integration;
 
 import auctionsniper.Auction;
 import auctionsniper.AuctionEventListener;
+import auctionsniper.XMPP.XMPPAuctionException;
 import auctionsniper.XMPP.XMPPAuctionHouse;
 import endtoend.ApplicationRunner;
 import endtoend.FakeAuctionServer;
@@ -26,7 +27,7 @@ public class XMPPAuctionHouseTest {
     }
 
     @BeforeEach
-    public void openConnection() throws IOException, SmackException, XMPPException, InterruptedException {
+    public void openConnection() throws IOException, XMPPAuctionException {
         auctionHouse = XMPPAuctionHouse.connect(FakeAuctionServer.XMPP_HOSTNAME, ApplicationRunner.SNIPER_ID, ApplicationRunner.SNIPER_PASSWORD);
     }
 

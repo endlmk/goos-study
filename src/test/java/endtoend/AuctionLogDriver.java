@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.logging.LogManager;
 
+import static auctionsniper.XMPP.XMPPAuctionHouse.LOG_FILE_NAME;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AuctionLogDriver {
-    private static final String LOG_FILE_NAME = "auction-sniper.log";
     private final File logFile = new File(LOG_FILE_NAME);
 
     public void hasEntry(Matcher<String> matcher) throws IOException {
